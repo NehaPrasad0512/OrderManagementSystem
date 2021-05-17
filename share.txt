@@ -1,0 +1,90 @@
+DROP DATABASE if exists UserdB;
+create schema UserdB;
+use UserdB;
+
+create table Buyer(
+	buyer_id varchar(10) primary key,
+	name varchar(50) not null,
+	email varchar(30) not null,
+	phone_number varchar(15) unique not null,
+	password varchar(50) not null,
+	is_piviledged varchar(5) not null,
+	reward_points integer not null,
+	is_active varchar(5) not null
+
+);
+
+insert into Buyer values("B101","Neha","neha@gmail.com","9930103311","Neha@1234","yes",1,"yes");
+
+create table Seller(
+	seller_id varchar(10) primary key,
+	name varchar(50) not null,
+	email varchar(30) not null,
+	phone_number varchar(15) unique not null,
+	password varchar(50) not null,
+	is_active varchar(5) not null
+);
+insert into Seller values("S102","Yadav","yadav@gmail.com","9930103311","Neha@1234","yes");
+
+create table Wishlist(
+	buyer_id varchar(10),
+	prod_id varchar(10),
+	primary key(buyer_id,prod_id)
+	
+);
+
+create table Cart(
+	buyer_id varchar(10),
+	prod_id varchar(10),
+	quantity integer not null,
+	primary key(buyer_id,prod_id)
+);
+select * from buyer;
+select * from seller;
+
+create schema ProductdB;
+use ProductdB;
+
+create table Product(
+	prod_id varchar(10) primary key,
+	product_name varchar(100) not null,
+	price float not null,
+    stock integer not null,
+    description varchar(800) not null,
+	image varchar(20) not null,
+    seller_id varchar(10) not null,
+	category varchar(50) not null,
+	subcategory varchar(50) not null,
+	product_rating float not null
+);
+insert into Product value("P108","Mixer",200.0,11,"Automatic and efficient","file.png","S105","Electronics","Philips brand",3.0); 
+insert into Product value("P100","Mixer",200.0,11,"Automatic and efficient","file.png","S105","Electronics","Philips brand",3.0); 
+insert into Product value("P102","Electrnic Mixer",500.0,11,"Automatic","file4.png","S105","Electronics","Philips brand",2.0); 
+
+create table subscribedProduct(
+	buyer_id varchar(10),
+	prod_id varchar(10),
+	quantity integer not null,
+	primary key(buyer_id,prod_id),
+	FOREIGN KEY (prod_id) REFERENCES Product(prod_id)
+);
+
+create schema OrderdB;
+use OrderdB;
+
+create table OrderTable(
+	order_id varchar(10) primary key,
+	buyer_id varchar(10) not null,
+	amount integer not null,
+	date date,
+	address varchar(50) not null,
+	status varchar(100) not null
+);
+
+create table productOrdered(
+	buyer_id varchar(10) not null,
+	prod_id varchar(10) not null,
+	seller_id varchar(10) not null,
+	quantity integer not null,
+	primary key(buyer_id,prod_id)	
+);

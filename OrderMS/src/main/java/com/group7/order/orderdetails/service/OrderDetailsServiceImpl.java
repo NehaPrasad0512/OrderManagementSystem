@@ -1,12 +1,15 @@
 package com.group7.order.orderdetails.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.entity.Order;
 import com.group7.order.orderdetails.repository.OrderDetailsRepository;
@@ -69,12 +72,17 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 		return dto;
 	}
 
-	@Override
-	public String placeOrder(String prodId) throws Exception {
-		// TODO Auto-generated method stub
-		
-		
-		return null;
+	public String placeOrder(List<CartDTO> cartItem) throws Exception{
+		Set<CartDTO> buyerDetail=new HashSet<>();
+		System.out.println(cartItem);
+//		for( CartDTO c:cartItem) {
+//			CartDTO value=new CartDTO();
+//			value.setBuyerId(c.getBuyerId());
+//			System.out.println(value);
+//			buyerDetail.add(c);
+//		}
+//		System.out.println(buyerDetail);
+		return "success";
 	}
-
+	
 }

@@ -1,17 +1,24 @@
 package com.group7.order.orderdetails.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.service.OrderDetailsService;
+
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -48,16 +55,22 @@ public class OrderDetailsController {
 	}
 	
 	
-	@PostMapping(value="/{prodId}")
-	public ResponseEntity<String> placeOrder(@PathVariable String prodId) {
+	@GetMapping(value="/placeOrder")
+	public ResponseEntity<String> placeOrder() {
 
 		try {
-		String msg = orderDetailsService.placeOrder(prodId);
-		return new ResponseEntity<String>(msg+" placed successfully",HttpStatus.OK);
+		List cartItem = new RestTemplate().getForObject("http://localhost:8200/user/cart",List.class);
+		if(!cartItem.isEmpty())
+		{
+		List<CartDTO> item=cartItem;
+		orderDetailsService.placeOrder(item);
+		}
+		return new ResponseEntity<String>("Hello worked"+" placed successfully",HttpStatus.OK);
 
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
+//		return null;
 	}
 	
 	

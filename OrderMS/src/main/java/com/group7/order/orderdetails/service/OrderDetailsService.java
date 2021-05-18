@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 
 @Service
@@ -15,7 +16,7 @@ public interface OrderDetailsService {
 	
 	public OrderDetailsDTO viewOrders(String orderId) throws Exception;
 	
-	public String placeOrder(String prodId) throws Exception;
+	public String placeOrder(List<CartDTO> cartItem) throws Exception;
 	
 	
 	

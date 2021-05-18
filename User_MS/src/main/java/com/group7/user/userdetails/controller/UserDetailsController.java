@@ -1,5 +1,8 @@
 package com.group7.user.userdetails.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -149,5 +152,15 @@ public class UserDetailsController {
 	
 	}
 
+	@GetMapping(value="cart")
+	public ResponseEntity<List<CartDTO>> viewCart() {
+		 List<CartDTO> data=new ArrayList<>();
+			try {
+				data=userDetailsService.viewAllCart();
+				return new ResponseEntity<>(data,HttpStatus.OK);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage()));		}
 
+	}
 }

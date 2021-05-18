@@ -62,18 +62,6 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 		
 	}
 
-	@Override
-	public String WishlistProduct(String prodId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String CartProduct(String prodId) throws Exception {
-		// TODO Auto-generated method stub
-		
-		return null;
-	}
 
 	@Override
 	public List<ProductDTO> CartCategory(String category) throws Exception {

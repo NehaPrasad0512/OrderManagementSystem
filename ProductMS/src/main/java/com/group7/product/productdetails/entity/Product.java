@@ -12,7 +12,6 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String prodId;
-	
 	@Column(name="product_name")
 	private String productName;
 	private float price;

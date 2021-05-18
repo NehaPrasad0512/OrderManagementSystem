@@ -120,6 +120,13 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 		return p;
 		
 	}
+
+	@Override
+	public ProductDTO getSpecificProduct(String productName) {
+		// TODO Auto-generated method stub
+		
+		return ProductDTO.valueOf(productRepository.findByProductName(productName));
+	}
 	
 
 	

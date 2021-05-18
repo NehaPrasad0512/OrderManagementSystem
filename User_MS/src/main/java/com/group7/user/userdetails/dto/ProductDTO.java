@@ -1,11 +1,8 @@
-package com.group7.product.productdetails.dto;
+package com.group7.user.userdetails.dto;
 
-import java.util.Optional;
-
-import com.group7.product.productdetails.entity.Product;
 
 public class ProductDTO {
-	private String prodId;
+	private String prodID;
 	private String productName;
 	private float price;
 	private int stock;
@@ -16,10 +13,10 @@ public class ProductDTO {
 	private String subcategory;
 	private float productRating;
 	public String getProdID() {
-		return prodId;
+		return prodID;
 	}
-	public void setProdID(String prodId) {
-		this.prodId = prodId;
+	public void setProdID(String prodID) {
+		this.prodID = prodID;
 	}
 	public String getProductName() {
 		return productName;
@@ -76,20 +73,11 @@ public class ProductDTO {
 	public void setProductRating(float productRating) {
 		this.productRating = productRating;
 	}
-	
-	//Converts an entity into DTO
-	public static ProductDTO valueOf(Optional<Product> product) {
-		ProductDTO productDTO=new ProductDTO();
-		productDTO.setProdID(product.get().getProdID());
-		productDTO.setCategory(product.get().getCategory());
-		productDTO.setDescription(product.get().getDescription());
-		productDTO.setImage(product.get().getImage());
-		productDTO.setPrice(product.get().getPrice());
-		productDTO.setProductName(product.get().getProductName());
-		productDTO.setSubcategory(product.get().getSubcategory());
-		productDTO.setStock(product.get().getStock());
-		productDTO.setSellerId(product.get().getSellerId());
-		productDTO.setProductRating(product.get().getProductRating());
-		return productDTO;
+	@Override
+	public String toString() {
+		return "ProductDTO [prodID=" + prodID + ", productName=" + productName + ", price=" + price + ", stock=" + stock
+				+ ", description=" + description + ", image=" + image + ", sellerId=" + sellerId + ", category="
+				+ category + ", subcategory=" + subcategory + ", productRating=" + productRating + "]";
 	}
+	
 }

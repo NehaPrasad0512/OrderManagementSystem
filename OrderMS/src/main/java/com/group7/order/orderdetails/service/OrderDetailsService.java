@@ -9,11 +9,15 @@ import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 @Service
 public interface OrderDetailsService {
 	
-	public String addProductFromCart(OrderDetailsDTO orderDetailsDTO) throws Exception;
+	public String addProductToCart(OrderDetailsDTO orderDetailsDTO) throws Exception;
 	
 	public String deleteProductFromCart(String prodId) throws Exception;
 	
-	public List<OrderDetailsDTO> viewOrders(String orderId) throws Exception;
+	public OrderDetailsDTO viewOrders(String orderId) throws Exception;
+	
+	public OrderDetailsDTO placeOrder(String prodId) throws Exception;
+	
+	
 	
 	
 

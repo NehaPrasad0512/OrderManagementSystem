@@ -15,7 +15,7 @@ public interface OrderDetailsService {
 	
 	public OrderDetailsDTO viewOrders(String orderId) throws Exception;
 	
-	public OrderDetailsDTO placeOrder(String prodId) throws Exception;
+	public String placeOrder(String prodId) throws Exception;
 	
 	
 	

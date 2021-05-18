@@ -48,7 +48,7 @@ public class OrderDetailsController {
 	}
 	
 	
-/*	@PostMapping(value="/{prodId}")
+	@PostMapping(value="/{prodId}")
 	public ResponseEntity<String> placeOrder(@PathVariable String prodId) {
 
 		try {
@@ -59,7 +59,7 @@ public class OrderDetailsController {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
-	*/
+	
 	
 	
 	@GetMapping(value="/view/{orderId}")

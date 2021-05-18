@@ -70,7 +70,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	}
 
 	@Override
-	public OrderDetailsDTO placeOrder(String prodId) throws Exception {
+	public String placeOrder(String prodId) throws Exception {
 		// TODO Auto-generated method stub
 		
 		

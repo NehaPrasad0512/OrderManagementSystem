@@ -47,6 +47,4 @@ public class OrderDetailsDTO {
 		this.status = status;
 	}
 	
-	
-
 }

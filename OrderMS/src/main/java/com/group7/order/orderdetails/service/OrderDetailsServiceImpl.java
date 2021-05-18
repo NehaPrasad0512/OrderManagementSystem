@@ -56,7 +56,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 		OrderDetailsDTO dto = new OrderDetailsDTO();
 		
 		if(order==null) {
-			throw new Exception("orderId doesnot exists");
+			throw new Exception("orderId does not exists");
 		}
 		
 		dto.setBuyerId(order.getBuyerId());

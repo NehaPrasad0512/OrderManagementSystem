@@ -29,7 +29,7 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 			if(Validator.ValidateProduct(productdto)) {
 				Product product=new Product();
 				product.setProdID(productdto.getProdID());
-				product.setProductName(product.getProductName());
+				product.setProductName(productdto.getProductName());
 				product.setDescription(productdto.getDescription());
 				product.setCategory(productdto.getCategory());
 				product.setImage(productdto.getImage());

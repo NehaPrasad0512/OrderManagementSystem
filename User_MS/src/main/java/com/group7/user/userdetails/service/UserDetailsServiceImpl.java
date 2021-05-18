@@ -146,7 +146,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public WishlistDTO wishlistData(String buyerId,String prodId) {
-		// TODO Auto-generated method stub
+		
 		Wishlist wishlist=new Wishlist();
 		CompositeTable ct=new CompositeTable();
 		ct.setBuyerId(buyerId);
@@ -168,7 +168,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public String wishToCart(CartDTO cartDTO) throws Exception {
-		// TODO Auto-generated method stub
+		
 		CompositeTable c=new CompositeTable();
 		c.setBuyerId(cartDTO.getBuyerId());
 		c.setProdId(cartDTO.getProdId());
@@ -184,16 +184,11 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		cart.setQuantity(cartDTO.getQuantity());
 		cartRepository.save(cart);
 		wishlistRepository.deleteById(c);
-//		CartDTO cDTO=new CartDTO();
-//		cDTO.setBuyerId(cart.getCompositeId().getBuyerId());
-//		cDTO.setProdId(cart.getCompositeId().getProdId());
-//		cDTO.setQuantity(cart.getQuantity());
 		return "successfully added idem to cart from wishlist";
 	}
 
 	@Override
 	public CartDTO cartData(String buyerId, String prodId,int quantity) {
-		// TODO Auto-generated method stub
 		Cart c=new Cart();
 		CompositeTable ct=new CompositeTable();
 		ct.setBuyerId(buyerId);

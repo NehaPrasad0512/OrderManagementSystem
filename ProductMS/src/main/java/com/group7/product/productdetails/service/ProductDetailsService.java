@@ -13,13 +13,11 @@ public interface ProductDetailsService {
 	
 	public String deleteProduct(String productName) throws Exception;
 	
-	public String WishlistProduct(String prodId) throws Exception;
-	
-	public String CartProduct(String prodId) throws Exception;
 	
 	public List<ProductDTO> CartCategory(String category) throws Exception;
 	
 	public ProductDTO CartProductName(String productName) throws Exception;
 	
-	
+	public ProductDTO getSpecificProduct(String productName);
+
 }

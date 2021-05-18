@@ -63,7 +63,7 @@ public class OrderDetailsController {
 	
 	
 	@GetMapping(value="/view/{orderId}")
-	public ResponseEntity<OrderDetailsDTO> viewOrder(@PathVariable String orderId) throws Exception{
+	public ResponseEntity<OrderDetailsDTO> viewOrders(@PathVariable String orderId) throws Exception{
 
 		 OrderDetailsDTO data=null;
 		try {

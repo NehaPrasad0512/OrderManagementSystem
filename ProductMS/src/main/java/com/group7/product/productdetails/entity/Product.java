@@ -8,11 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Product")
 public class Product {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="prod_id")
 	private String prodId;
 	
 	@Column(name="product_name")
@@ -25,6 +23,7 @@ public class Product {
 	private String category;
 	private String subcategory;
 	private float productRating;
+
 	public String getProdID() {
 		return prodId;
 	}

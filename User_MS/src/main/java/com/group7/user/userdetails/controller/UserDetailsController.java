@@ -1,17 +1,26 @@
 package com.group7.user.userdetails.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
+import com.group7.user.userdetails.dto.CartDTO;
+import com.group7.user.userdetails.dto.ProductDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
+import com.group7.user.userdetails.dto.WishlistDTO;
+import com.group7.user.userdetails.entity.CompositeTable;
+import com.group7.user.userdetails.entity.Wishlist;
+import com.group7.user.userdetails.repository.WishlistRepository;
 import com.group7.user.userdetails.service.UserDetailsService;
 
 @RestController
@@ -20,7 +29,12 @@ public class UserDetailsController {
 
 	@Autowired
 	UserDetailsService userDetailsService;
-	
+
+	@Autowired
+	Environment environment;
+	@Autowired
+	WishlistRepository wishlistRepository;
+
 	@PostMapping(value="/buyer/register")
 	public ResponseEntity<String> registerBuyer(@RequestBody BuyerDTO buyer) {
 		String id;
@@ -93,8 +107,7 @@ public class UserDetailsController {
 	}
 	
 	@PostMapping(value="/cart")
-	public ResponseEntity<String> DemoCart() {
-	
+	public ResponseEntity<String> DemoCart() {	
 		try {
 		userDetailsService.demoCart();
 		return new ResponseEntity<String>("Successly added in cart",HttpStatus.OK);
@@ -104,4 +117,37 @@ public class UserDetailsController {
 		}
 	}
 	
+	@GetMapping(value="/buyer/wishlist/{buyerId}/{productName}")
+	public WishlistDTO getWishlistProduct(@PathVariable String buyerId,@PathVariable String productName) {
+	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
+	System.out.println(productId.getProdID());
+	
+	//	WishlistDTO value=new WishlistDTO();
+		WishlistDTO value = userDetailsService.wishlistData(buyerId,productId.getProdID());
+		return value;		
+	
+	}
+
+	@PostMapping(value="/buyer/wish-cart")
+	public ResponseEntity<String> getWishlistToCart(@RequestBody CartDTO cartDTO) {
+		try {
+		userDetailsService.wishToCart(cartDTO);
+		return new ResponseEntity<String>("Successfully added product from wishlist to cart",HttpStatus.OK);
+ 
+		}catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+		}
+	}
+	
+	@PostMapping(value="/buyer/cart/{buyerId}/{productName}/{quantity}")
+	public CartDTO addCartProduct(@PathVariable String buyerId,@PathVariable String productName,@PathVariable int quantity) {
+	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
+	System.out.println(productId.getProdID());
+	
+		CartDTO value = userDetailsService.cartData(buyerId,productId.getProdID(),quantity);
+		return value;		
+	
+	}
+
+
 }

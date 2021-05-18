@@ -20,4 +20,6 @@ public interface ProductDetailsService {
 	public List<ProductDTO> CartCategory(String category) throws Exception;
 	
 	public ProductDTO CartProductName(String productName) throws Exception;
+	
+	
 }

@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
+import com.group7.user.userdetails.dto.CartDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
+import com.group7.user.userdetails.dto.WishlistDTO;
 import com.group7.user.userdetails.entity.Buyer;
 import com.group7.user.userdetails.entity.Cart;
 import com.group7.user.userdetails.entity.CompositeTable;
 import com.group7.user.userdetails.entity.Seller;
+import com.group7.user.userdetails.entity.Wishlist;
 import com.group7.user.userdetails.repository.CartRepository;
 import com.group7.user.userdetails.repository.SellerRepository;
 import com.group7.user.userdetails.repository.UserDetailsRepository;
+import com.group7.user.userdetails.repository.WishlistRepository;
 
 @Service("userDetailsServiceImpl")
 @Transactional
@@ -28,6 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Autowired
 	SellerRepository sellerRepository;
+	
+	@Autowired
+	WishlistRepository wishlistRepository;
 
 	@Autowired
 	CartRepository cartRepository;
@@ -131,11 +138,76 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	public void demoCart() {
 		Cart c=new Cart();
 		CompositeTable ct=new CompositeTable();
-		ct.setBuyerId("B102");
 		ct.setProdId("P102");
 		c.setCompositeId(ct);
 		c.setQuantity(100);
 		cartRepository.save(c);
 	}
+
+	@Override
+	public WishlistDTO wishlistData(String buyerId,String prodId) {
+		// TODO Auto-generated method stub
+		Wishlist wishlist=new Wishlist();
+		CompositeTable ct=new CompositeTable();
+		ct.setBuyerId(buyerId);
+		ct.setProdId(prodId);
+		wishlist.setCompositeId(ct);
+		wishlistRepository.save(wishlist);
+		WishlistDTO wishDTO=new WishlistDTO();
+		wishDTO.setBuyerId(wishlist.getCompositeId().getBuyerId());
+		wishDTO.setProdId(wishlist.getCompositeId().getProdId());
+		return wishDTO;
+	}
+	
+
+	@Override
+	public void createBuyerList(WishlistDTO listDTO) {
+		Wishlist wishlist = listDTO.createEntity();
+		wishlistRepository.save(wishlist);
+	}
+
+	@Override
+	public String wishToCart(CartDTO cartDTO) throws Exception {
+		// TODO Auto-generated method stub
+		CompositeTable c=new CompositeTable();
+		c.setBuyerId(cartDTO.getBuyerId());
+		c.setProdId(cartDTO.getProdId());
+		Optional<Wishlist> dataProduct = wishlistRepository.findById(c);
+		try {
+			if(dataProduct.isEmpty())
+				throw new Exception("No such product exists in wishlist");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		Cart cart=new Cart();
+		cart.setCompositeId(c);
+		cart.setQuantity(cartDTO.getQuantity());
+		cartRepository.save(cart);
+		wishlistRepository.deleteById(c);
+//		CartDTO cDTO=new CartDTO();
+//		cDTO.setBuyerId(cart.getCompositeId().getBuyerId());
+//		cDTO.setProdId(cart.getCompositeId().getProdId());
+//		cDTO.setQuantity(cart.getQuantity());
+		return "successfully added idem to cart from wishlist";
+	}
+
+	@Override
+	public CartDTO cartData(String buyerId, String prodId,int quantity) {
+		// TODO Auto-generated method stub
+		Cart c=new Cart();
+		CompositeTable ct=new CompositeTable();
+		ct.setBuyerId(buyerId);
+		ct.setProdId(prodId);
+		c.setCompositeId(ct);
+		c.setQuantity(quantity);
+		cartRepository.save(c);
+		CartDTO cDTO=new CartDTO();
+		cDTO.setBuyerId(c.getCompositeId().getBuyerId());
+		cDTO.setProdId(c.getCompositeId().getProdId());
+		cDTO.setQuantity(c.getQuantity());
+		return cDTO;
+	}
+
+
 
 }

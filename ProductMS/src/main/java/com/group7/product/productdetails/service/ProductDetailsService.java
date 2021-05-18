@@ -19,4 +19,5 @@ public interface ProductDetailsService {
 	public ProductDTO CartProductName(String productName) throws Exception;
 	
 	public ProductDTO getSpecificProduct(String productName);
+
 }

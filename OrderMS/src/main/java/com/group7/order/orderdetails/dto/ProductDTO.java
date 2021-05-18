@@ -1,4 +1,4 @@
-package com.group7.user.userdetails.dto;
+package com.group7.order.orderdetails.dto;
 
 
 public class ProductDTO {

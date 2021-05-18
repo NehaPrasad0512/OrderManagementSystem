@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.group7.product.productdetails.dto.PDTO;
 import com.group7.product.productdetails.dto.ProductDTO;
 import com.group7.product.productdetails.service.ProductDetailsService;
 //api class
@@ -78,8 +79,21 @@ public class ProductDetailsController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage()));		}
-	
-
 	}
 
+	@GetMapping(value="/wishlist/{productName}")
+	public ProductDTO wishlistProductByName(@PathVariable String productName) throws Exception{
+		ProductDTO val=productDetailsService.getSpecificProduct(productName);
+		ProductDTO p=new ProductDTO();
+		p.setProdID(val.getProdID());
+		p.setDescription(val.getDescription());
+		p.setProductName(val.getProductName());
+		p.setPrice(val.getPrice());
+		p.setStock(val.getStock());
+		p.setSubcategory(val.getSubcategory());
+		p.setProductRating(val.getProductRating());
+		p.setSellerId(val.getSellerId());
+		return p;
+	}
+	
 }

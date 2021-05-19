@@ -28,5 +28,7 @@ public interface UserDetailsService {
 	public String wishToCart(CartDTO cartDTO) throws Exception;
 	public CartDTO cartData(String buyerId,String prodId,int quantity);
 
+	public String deleteFromCart(String prodId,String buyerId);
+	
 	public List<CartDTO> viewAllCart() throws Exception;
 }

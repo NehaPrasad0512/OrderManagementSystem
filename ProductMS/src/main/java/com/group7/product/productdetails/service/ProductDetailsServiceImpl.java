@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.group7.product.productdetails.dto.ProductDTO;
 import com.group7.product.productdetails.entity.Product;
+import com.group7.product.productdetails.repository.ProductOrderedRepository;
 import com.group7.product.productdetails.repository.ProductRepository;
 import com.group7.product.productdetails.validator.Validator;
 
@@ -20,6 +21,8 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 	@Autowired
 	ProductRepository productRepository;
 	
+	@Autowired
+	ProductOrderedRepository productOrderedRepository;
 	@Override
 	@Transactional
 	public String addProduct(ProductDTO productdto,String id) throws Exception {

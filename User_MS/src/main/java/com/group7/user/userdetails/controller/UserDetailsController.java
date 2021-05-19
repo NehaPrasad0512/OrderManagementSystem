@@ -1,9 +1,12 @@
 package com.group7.user.userdetails.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +39,8 @@ public class UserDetailsController {
 	@Autowired
 	WishlistRepository wishlistRepository;
 
+	 @Autowired 
+	 DiscoveryClient client;
 	@PostMapping(value="/buyer/register")
 	public ResponseEntity<String> registerBuyer(@RequestBody BuyerDTO buyer) {
 		String id;
@@ -95,6 +100,17 @@ public class UserDetailsController {
 		}
 	}
 
+	@PostMapping(value="/removeItemsCart/{buyerId}/{prodId}")
+	public ResponseEntity<String> DeleteBuyer(@PathVariable String buyerId,@PathVariable String prodId) {
+		String msg;
+		try {
+		msg=userDetailsService.deleteFromCart(prodId, buyerId);
+		return new ResponseEntity<String>(msg,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@PostMapping(value="/seller/{sellerId}")
 	public ResponseEntity<String> DeleteSeller(@PathVariable String sellerId) {
 		String msg;
@@ -111,7 +127,8 @@ public class UserDetailsController {
 	public ResponseEntity<String> DemoCart() {	
 		try {
 		userDetailsService.demoCart();
-		return new ResponseEntity<String>("Successly added in cart",HttpStatus.OK);
+		
+		return new ResponseEntity<String>("Successfully added in cart",HttpStatus.OK);
  
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -147,11 +164,15 @@ public class UserDetailsController {
 	
 	}
 
-	@GetMapping(value="cart")
+	@GetMapping(value="/cart")
 	public ResponseEntity<List<CartDTO>> viewCart() {
 		 List<CartDTO> data=new ArrayList<>();
 			try {
 				data=userDetailsService.viewAllCart();
+
+//			List<ServiceInstance> instances=client.getInstances("User_MS");
+//			ServiceInstance instance=instances.get(0);
+//			URI UserUri = instance.getUri();
 				return new ResponseEntity<>(data,HttpStatus.OK);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

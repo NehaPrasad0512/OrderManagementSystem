@@ -6,7 +6,7 @@ public class CartDTO {
 	private String prodId;
 	private int quantity;
 	private String compositeId;
-
+	
 	public String getCompositeId() {
 		return compositeId;
 	}

@@ -12,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.dto.ProductDTO;
+import com.group7.order.orderdetails.entity.CompositeTable;
 import com.group7.order.orderdetails.entity.Order;
+import com.group7.order.orderdetails.entity.ProductOrdered;
 import com.group7.order.orderdetails.repository.OrderDetailsRepository;
+import com.group7.order.orderdetails.repository.ProductOrderedRepository;
 
 
 @Service
@@ -23,6 +26,9 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	@Autowired
 	OrderDetailsRepository orderRepository;
 
+	@Autowired
+	ProductOrderedRepository productOrderedRepository;
+	
 	@Override
 	public String addProductToCart(OrderDetailsDTO orderDetailsDTO) throws Exception {
 		// TODO Auto-generated method stub
@@ -108,9 +114,16 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 			value.setProdId(c.getProdId());
 			value.setQuantity(c.getQuantity());
 			str="O"+(val++);
-			String dataOrder = this.OrderDone(value.getBuyerId(),value.getProdId(),str);	
+			String dataOrder = this.OrderDone(value.getBuyerId(),value.getProdId(),str);
+			CompositeTable composite=new CompositeTable();
+			composite.setBuyerId(value.getBuyerId());
+			composite.setProdId(value.getProdId());
+			ProductOrdered ordered=new ProductOrdered();
+			ordered.setCompositetb(composite);
+			ordered.setQuantity(c.getQuantity());
+			ordered.setSellerId(str);
+			productOrderedRepository.save(ordered);
 			list.add(dataOrder);
-		
 			buyerDetail.add(c);
 		}
 		return list;

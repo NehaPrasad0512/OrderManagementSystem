@@ -99,7 +99,7 @@ public class OrderDetailsController {
 
 	}
 
-	@GetMapping(value="/prodId}")
+	@GetMapping(value="/{prodId}")
 	public ResponseEntity<ProductDTO> viewOrders(@PathVariable String prodId) throws Exception{
 
 		 ProductDTO data=null;

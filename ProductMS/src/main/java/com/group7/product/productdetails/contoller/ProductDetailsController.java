@@ -98,7 +98,7 @@ public class ProductDetailsController {
 		return p;
 	}
 	
-	@GetMapping(value="/search/{prodId}")
+	@GetMapping(value="/search12/{prodId}")
 	public ResponseEntity<ProductDTO> searchProductById(@PathVariable String prodId) throws Exception{
 
 		 ProductDTO data=null;

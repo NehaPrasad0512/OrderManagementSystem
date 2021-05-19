@@ -27,7 +27,8 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 	@Transactional
 	public String addProduct(ProductDTO productdto,String id) throws Exception {
 		// TODO Auto-generated method stub
-		//Optional<Product> details = productRepository.findByProductName(productdto.getProductName());
+		Optional<Product> details = productRepository.findByProductName(productdto.getProductName());
+		if(details.isEmpty()) {
 		try {
 			if(Validator.ValidateProduct(productdto)) {
 				Product product=new Product();
@@ -45,12 +46,12 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 				product.setStock(productdto.getStock());
 				productRepository.save(product);
 				
-				return "added";}
+				return "product";}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return e.getMessage();	
-		}
-		return null;
+		}}
+		return "product already exists";
 	}
 
 	@Override

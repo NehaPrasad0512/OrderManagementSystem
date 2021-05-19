@@ -41,7 +41,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	CartRepository cartRepository;
 	@Override
 	public String registerBuyerUser(BuyerDTO buyerdto) {
-		// TODO Auto-generated method stub
 		try {
 			if(Validator.validateBuyer(buyerdto)) {
 			Buyer buyer=new Buyer();
@@ -57,7 +56,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			return buyer.getBuyerId();}
 			else return null;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.getMessage();
 		}
@@ -80,15 +78,12 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			else 
 				return null;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			return e.getMessage();
+				return e.getMessage();
 		}
 	}
 
 	@Override
 	public String loginBuyerUser(String email,String password) throws Exception {
-		// TODO Auto-generated method stub
 		System.out.println(email);
 		Optional<Buyer> emailId = userDetailsRepository.findByEmail(email);
 		
@@ -125,7 +120,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public String deleteBuyer(String buyerId) throws Exception {
-		// TODO Auto-generated method stub
 		Optional<Buyer> buyerDelete = userDetailsRepository.findById(buyerId);
 		if(buyerDelete.isEmpty())
 			throw new Exception("No buyer with such buyerId exists"); 
@@ -136,7 +130,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public String deleteSeller(String sellerId) throws Exception {
-		// TODO Auto-generated method stub
 		Optional<Seller> deleteSeller = sellerRepository.findById(sellerId);
 		if(deleteSeller.isEmpty())
 			throw new Exception("No seller with such sellerId exists"); 
@@ -216,7 +209,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public List<CartDTO> viewAllCart() throws Exception {
-		// TODO Auto-generated method stub
 		List<CartDTO> listItem=new ArrayList<>();
 		Iterable<Cart> valueProduct = cartRepository.findAll();
 		if(valueProduct.equals(null))

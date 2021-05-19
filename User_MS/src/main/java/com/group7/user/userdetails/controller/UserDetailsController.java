@@ -147,6 +147,7 @@ public class UserDetailsController {
 	public ResponseEntity<String> getWishlistToCart(@RequestBody CartDTO cartDTO) {
 		try {
 		userDetailsService.wishToCart(cartDTO);
+		
 		return new ResponseEntity<String>("Successfully added product from wishlist to cart",HttpStatus.OK);
  
 		}catch(Exception e) {
@@ -160,6 +161,15 @@ public class UserDetailsController {
 	System.out.println(productId.getProdID());
 	
 		CartDTO value = userDetailsService.cartData(buyerId,productId.getProdID(),quantity);
+		return value;		
+	
+	}
+	
+	@PostMapping(value="/buyer/wishlist/{buyerId}/{productName}")
+	public WishlistDTO addCartProduct(@PathVariable String buyerId,@PathVariable String productName) {
+	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
+	System.out.println(productId.getProdID());
+		WishlistDTO value = userDetailsService.wishlistData(buyerId, productId.getProdID());
 		return value;		
 	
 	}

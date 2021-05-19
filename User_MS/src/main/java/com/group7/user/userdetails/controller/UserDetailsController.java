@@ -1,5 +1,8 @@
 package com.group7.user.userdetails.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +21,6 @@ import com.group7.user.userdetails.dto.CartDTO;
 import com.group7.user.userdetails.dto.ProductDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
 import com.group7.user.userdetails.dto.WishlistDTO;
-import com.group7.user.userdetails.entity.CompositeTable;
-import com.group7.user.userdetails.entity.Wishlist;
 import com.group7.user.userdetails.repository.WishlistRepository;
 import com.group7.user.userdetails.service.UserDetailsService;
 
@@ -120,11 +121,8 @@ public class UserDetailsController {
 	@GetMapping(value="/buyer/wishlist/{buyerId}/{productName}")
 	public WishlistDTO getWishlistProduct(@PathVariable String buyerId,@PathVariable String productName) {
 	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
-	System.out.println(productId.getProdID());
-	
-	//	WishlistDTO value=new WishlistDTO();
-		WishlistDTO value = userDetailsService.wishlistData(buyerId,productId.getProdID());
-		return value;		
+	WishlistDTO value = userDetailsService.wishlistData(buyerId,productId.getProdID());
+	return value;		
 	
 	}
 
@@ -149,5 +147,15 @@ public class UserDetailsController {
 	
 	}
 
+	@GetMapping(value="cart")
+	public ResponseEntity<List<CartDTO>> viewCart() {
+		 List<CartDTO> data=new ArrayList<>();
+			try {
+				data=userDetailsService.viewAllCart();
+				return new ResponseEntity<>(data,HttpStatus.OK);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage()));		}
 
+	}
 }

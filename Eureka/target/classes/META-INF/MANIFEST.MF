@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: NEHA PRASAD
+Build-Jdk: 15.0.2
+Implementation-Title: infytel-discovery-server
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.group7.reskill.eureka
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/Eureka
+Created-By: Maven Integration for Eclipse
+

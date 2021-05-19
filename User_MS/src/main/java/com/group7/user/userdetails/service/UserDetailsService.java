@@ -1,5 +1,7 @@
 package com.group7.user.userdetails.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
@@ -18,7 +20,7 @@ public interface UserDetailsService {
 	
 	public String deleteBuyer(String buyerId) throws Exception;
 	public String deleteSeller(String sellerId) throws Exception;
-	void demoCart();
+	public void demoCart();
 	
 	public void createBuyerList(WishlistDTO wishlistDTO);
 	public WishlistDTO wishlistData(String buyerId,String productName);
@@ -26,4 +28,5 @@ public interface UserDetailsService {
 	public String wishToCart(CartDTO cartDTO) throws Exception;
 	public CartDTO cartData(String buyerId,String prodId,int quantity);
 
+	public List<CartDTO> viewAllCart() throws Exception;
 }

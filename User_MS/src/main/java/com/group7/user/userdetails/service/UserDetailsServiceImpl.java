@@ -1,5 +1,7 @@
 package com.group7.user.userdetails.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,6 +203,23 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		cDTO.setProdId(c.getCompositeId().getProdId());
 		cDTO.setQuantity(c.getQuantity());
 		return cDTO;
+	}
+
+	@Override
+	public List<CartDTO> viewAllCart() throws Exception {
+		// TODO Auto-generated method stub
+		List<CartDTO> listItem=new ArrayList<>();
+		Iterable<Cart> valueProduct = cartRepository.findAll();
+		if(valueProduct.equals(null))
+			throw new Exception("No items in cart");
+		for(Cart cart:valueProduct) {
+			CartDTO cDTO=new CartDTO();
+			cDTO.setBuyerId(cart.getCompositeId().getBuyerId());
+			cDTO.setProdId(cart.getCompositeId().getProdId());
+			cDTO.setQuantity(cart.getQuantity());
+			listItem.add(cDTO);
+		}
+		return listItem;
 	}
 
 

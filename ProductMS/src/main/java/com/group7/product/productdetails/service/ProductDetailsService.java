@@ -9,10 +9,9 @@ import com.group7.product.productdetails.dto.ProductDTO;
 @Service
 public interface ProductDetailsService {
 
-	public String addProduct(ProductDTO productdto) throws Exception;
+	public String addProduct(ProductDTO productdto,String id) throws Exception;
 	
 	public String deleteProduct(String productName) throws Exception;
-	
 	
 	public List<ProductDTO> CartCategory(String category) throws Exception;
 	
@@ -20,4 +19,5 @@ public interface ProductDetailsService {
 	
 	public ProductDTO getSpecificProduct(String productName);
 
+	public ProductDTO getSpecificProductOnId(String prodId) throws Exception;
 }

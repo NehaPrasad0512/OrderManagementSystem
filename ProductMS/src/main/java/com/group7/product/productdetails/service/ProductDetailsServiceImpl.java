@@ -22,13 +22,15 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 	
 	@Override
 	@Transactional
-	public String addProduct(ProductDTO productdto) throws Exception {
+	public String addProduct(ProductDTO productdto,String id) throws Exception {
 		// TODO Auto-generated method stub
 		//Optional<Product> details = productRepository.findByProductName(productdto.getProductName());
 		try {
 			if(Validator.ValidateProduct(productdto)) {
 				Product product=new Product();
+				productdto.setProdID(id);
 				product.setProdID(productdto.getProdID());
+				System.out.println(product.getProdID());
 				product.setProductName(productdto.getProductName());
 				product.setDescription(productdto.getDescription());
 				product.setCategory(productdto.getCategory());
@@ -38,9 +40,9 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 				product.setSubcategory(productdto.getSubcategory());
 				product.setProductRating(productdto.getProductRating());
 				product.setStock(productdto.getStock());
-				System.out.println(productRepository.save(product));
+				productRepository.save(product);
 				
-				return product.getProdID();}
+				return "added";}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return e.getMessage();	
@@ -117,5 +119,22 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 	}
 	
 
+	public ProductDTO getSpecificProductOnId(String prodId) throws Exception{
+		Optional<Product> product = productRepository.findById(prodId);
+		if(product.isEmpty())
+			throw new Exception("No products exists");
+		ProductDTO pDTO=new ProductDTO();
+		pDTO.setProdID(product.get().getProdID());
+		pDTO.setStock(product.get().getStock());
+		pDTO.setProductName(product.get().getProductName());
+		pDTO.setCategory(product.get().getCategory());
+		pDTO.setDescription(product.get().getDescription());
+		pDTO.setImage(product.get().getImage());
+		pDTO.setProductRating(product.get().getProductRating());
+		pDTO.setPrice(product.get().getPrice());
+		pDTO.setSellerId(product.get().getSellerId());
+		pDTO.setSubcategory(product.get().getSubcategory());
+		return pDTO;
+	}
 	
 }

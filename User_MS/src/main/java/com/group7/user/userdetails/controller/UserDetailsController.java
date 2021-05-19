@@ -167,12 +167,13 @@ public class UserDetailsController {
 	
 	@PostMapping(value="/buyer/wishlist/{buyerId}/{productName}")
 	public WishlistDTO addCartProduct(@PathVariable String buyerId,@PathVariable String productName) {
-	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
-	System.out.println(productId.getProdID());
-		WishlistDTO value = userDetailsService.wishlistData(buyerId, productId.getProdID());
-		return value;		
-	
-	}
+	try {
+		ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
+	WishlistDTO value = userDetailsService.wishlistData(buyerId, productId.getProdID());
+	return value;		
+	}catch(Exception e) {
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage() ));
+	}}
 
 	@GetMapping(value="/cart")
 	public ResponseEntity<List<CartDTO>> viewCart() {

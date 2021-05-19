@@ -52,11 +52,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			buyer.setPhoneNumber(buyerdto.getPhoneNumber());
 			buyer.setIsPiviledged( buyerdto.getIsPiviledged());
 			buyer.setRewardPoints(buyerdto.getRewardPoints());
-			System.out.println(userDetailsRepository.save(buyer));
+			userDetailsRepository.save(buyer);
 			return buyer.getBuyerId();}
 			else return null;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return e.getMessage();
 		}
 		}
@@ -84,7 +83,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public String loginBuyerUser(String email,String password) throws Exception {
-		System.out.println(email);
 		Optional<Buyer> emailId = userDetailsRepository.findByEmail(email);
 		
 		if(emailId.isEmpty()) {
@@ -103,8 +101,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public String loginSellerUser(String email, String password) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println(email);
 		Optional<Seller> emailSeller = sellerRepository.findByEmail(email);
 		if(emailSeller.isEmpty())
 			throw new Exception("No seller with such email exists"); 
@@ -181,7 +177,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			if(dataProduct.isEmpty())
 				throw new Exception("No such product exists in wishlist");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			return e.getMessage();
 		}
 		Cart cart=new Cart();
 		cart.setCompositeId(c);
@@ -193,42 +189,42 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public CartDTO cartData(String buyerId, String prodId,int quantity) {
-		Cart c=new Cart();
-		CompositeTable ct=new CompositeTable();
-		ct.setBuyerId(buyerId);
-		ct.setProdId(prodId);
-		c.setCompositeId(ct);
-		c.setQuantity(quantity);
-		cartRepository.save(c);
-		CartDTO cDTO=new CartDTO();
-		cDTO.setBuyerId(c.getCompositeId().getBuyerId());
-		cDTO.setProdId(c.getCompositeId().getProdId());
-		cDTO.setQuantity(c.getQuantity());
-		return cDTO;
+		Cart cart=new Cart();
+		CompositeTable compositeTable=new CompositeTable();
+		compositeTable.setBuyerId(buyerId);
+		compositeTable.setProdId(prodId);
+		cart.setCompositeId(compositeTable);
+		cart.setQuantity(quantity);
+		cartRepository.save(cart);
+		CartDTO cartDTO=new CartDTO();
+		cartDTO.setBuyerId(cart.getCompositeId().getBuyerId());
+		cartDTO.setProdId(cart.getCompositeId().getProdId());
+		cartDTO.setQuantity(cart.getQuantity());
+		return cartDTO;
 	}
 
 	@Override
 	public List<CartDTO> viewAllCart() throws Exception {
 		List<CartDTO> listItem=new ArrayList<>();
 		Iterable<Cart> valueProduct = cartRepository.findAll();
-		if(valueProduct.equals(null))
+		if(valueProduct==null)
 			throw new Exception("No items in cart");
 		for(Cart cart:valueProduct) {
-			CartDTO cDTO=new CartDTO();
-			cDTO.setBuyerId(cart.getCompositeId().getBuyerId());
-			cDTO.setProdId(cart.getCompositeId().getProdId());
-			cDTO.setQuantity(cart.getQuantity());
-			listItem.add(cDTO);
+			CartDTO cartDTO=new CartDTO();
+			cartDTO.setBuyerId(cart.getCompositeId().getBuyerId());
+			cartDTO.setProdId(cart.getCompositeId().getProdId());
+			cartDTO.setQuantity(cart.getQuantity());
+			listItem.add(cartDTO);
 		}
 		return listItem;
 	}
 
 	public String deleteFromCart(String prodId,String buyerId) {
-		CompositeTable c=new CompositeTable();
-		c.setBuyerId(buyerId);
-		c.setProdId(prodId);
-		cartRepository.deleteById(c);
-		return c.getProdId();
+		CompositeTable compositeTable=new CompositeTable();
+		compositeTable.setBuyerId(buyerId);
+		compositeTable.setProdId(prodId);
+		cartRepository.deleteById(compositeTable);
+		return compositeTable.getProdId();
 	}
 
 }

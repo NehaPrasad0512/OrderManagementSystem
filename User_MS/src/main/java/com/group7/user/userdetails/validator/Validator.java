@@ -20,10 +20,8 @@ public class Validator {
 		else if(validatePassword(password))
 			throw new Exception("It should be 7 to 20 characters in length (both inclusive). It should contain at least one uppercase, at least one lowercase, at least one digit. It should also contain a special character amongst -! @, #, $, %, ^, &, *");
 		
-		if(	validateName(name) && validateEmail(email) && validatePhone(phoneNo) && validatePassword(password))
-			return true;
-		else
-			return false;
+		return (validateName(name) && validateEmail(email) && validatePhone(phoneNo) && validatePassword(password));
+			
 	}
 
 	
@@ -42,47 +40,36 @@ public class Validator {
 			throw new Exception("It should be 7 to 20 characters in length (both inclusive). It should contain at least one uppercase, at least one lowercase, at least one digit. It should also contain a special character amongst -! @, #, $, %, ^, &, *");
 		
 		
-		if(	validateName(name) && validateEmail(email) && validatePhone(phoneNo) && validatePassword(password))
-			return true;
-		else
-			return false;
+		return (validateName(name) && validateEmail(email) && validatePhone(phoneNo) && validatePassword(password));
+		
 	}
 	
 	public static boolean validateName(String name) {
-		String regrex="^[A-Za-z ]+$";
-		if(name.matches(regrex))
-			return true;
-		return false;
+		String regrex1="^[A-Za-z ]+$";
+		return (name.matches(regrex1));
+		
 	}
 	
 	public static boolean validateEmail(String email) {
-		String regrex="^[A-Za-z]+[@]+[A-Za-z]+(.com)$";
-		if(email.matches(regrex))
-			return true;
-		return false;
+		String regrex2="^[A-Za-z]+[@]+[A-Za-z]+(.com)$";
+		return (email.matches(regrex2));
 	}
 	
 	public static boolean validatePhone(String phone) {
-		String regrex="^[7-9]{1}[0-9]{9}$";
-		if(phone.matches(regrex)) 
-			return true;
-		return false;
+		String regrex3="^[7-9]{1}[0-9]{9}$";
+		return (phone.matches(regrex3)); 
 	}
 	
 
 	public static boolean validatePhoneBuyer(String phone) {
-		String regrex="^[7-9]{1}[0-9]{8}$";
-		if(phone.matches(regrex)) 
-			return true;
-		return false;
+		String regrex4="^[7-9]{1}[0-9]{8}$";
+		return (phone.matches(regrex4));
 	}
 	
 	public static boolean validatePassword(String password) {
 		String regex = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"
                 + "(?=.*[@#$%^&+=]).{7,20}$";
-		if(password.matches(regex))
-			return true;
-		return false;
+		return (password.matches(regex));
 	}
 }

@@ -180,9 +180,6 @@ public class UserDetailsController {
 			try {
 				data=userDetailsService.viewAllCart();
 
-//			List<ServiceInstance> instances=client.getInstances("User_MS");
-//			ServiceInstance instance=instances.get(0);
-//			URI UserUri = instance.getUri();
 				return new ResponseEntity<>(data,HttpStatus.OK);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

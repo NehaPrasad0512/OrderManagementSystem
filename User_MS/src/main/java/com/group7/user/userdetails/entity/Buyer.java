@@ -2,9 +2,6 @@ package com.group7.user.userdetails.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
-
 @Entity
 public class Buyer {
 	@Id

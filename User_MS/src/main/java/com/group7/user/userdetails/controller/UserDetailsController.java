@@ -21,8 +21,6 @@ import com.group7.user.userdetails.dto.CartDTO;
 import com.group7.user.userdetails.dto.ProductDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
 import com.group7.user.userdetails.dto.WishlistDTO;
-import com.group7.user.userdetails.entity.CompositeTable;
-import com.group7.user.userdetails.entity.Wishlist;
 import com.group7.user.userdetails.repository.WishlistRepository;
 import com.group7.user.userdetails.service.UserDetailsService;
 
@@ -123,11 +121,8 @@ public class UserDetailsController {
 	@GetMapping(value="/buyer/wishlist/{buyerId}/{productName}")
 	public WishlistDTO getWishlistProduct(@PathVariable String buyerId,@PathVariable String productName) {
 	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
-	System.out.println(productId.getProdID());
-	
-	//	WishlistDTO value=new WishlistDTO();
-		WishlistDTO value = userDetailsService.wishlistData(buyerId,productId.getProdID());
-		return value;		
+	WishlistDTO value = userDetailsService.wishlistData(buyerId,productId.getProdID());
+	return value;		
 	
 	}
 

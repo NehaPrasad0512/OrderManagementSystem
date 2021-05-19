@@ -1,5 +1,6 @@
 package com.group7.order.orderdetails.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
+import com.group7.order.orderdetails.dto.ProductDTO;
 import com.group7.order.orderdetails.service.OrderDetailsService;
 
 
@@ -60,36 +64,55 @@ public class OrderDetailsController {
 
 		try {
 		List cartItem = new RestTemplate().getForObject("http://localhost:8200/user/cart",List.class);
+		ObjectMapper mapper = new ObjectMapper();
 		if(!cartItem.isEmpty())
 		{
-		List<CartDTO> item=cartItem;
-		orderDetailsService.placeOrder(item);
-		}
-		return new ResponseEntity<String>("Hello worked"+" placed successfully",HttpStatus.OK);
+		 CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, CartDTO.class);
 
+		List<CartDTO> item= mapper.convertValue(cartItem,listType);
+		
+		List<String> val = orderDetailsService.placeOrder(item);
+		
+		return new ResponseEntity<String>(val+" placed successfully",HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("no items to place",HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
-//		return null;
+		
 	}
 	
 	
 	
-	@GetMapping(value="/view/{orderId}")
-	public ResponseEntity<OrderDetailsDTO> viewOrders(@PathVariable String orderId) throws Exception{
+	@GetMapping(value="/view")
+	public ResponseEntity<List<OrderDetailsDTO>> viewOrders() throws Exception{
 
-		 OrderDetailsDTO data=null;
+		 List<OrderDetailsDTO> data=null;
 		try {
-			data = orderDetailsService.viewOrders(orderId);
+			data = orderDetailsService.viewAllOrders();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
-		return new ResponseEntity<OrderDetailsDTO>(data,HttpStatus.OK);
+		return new ResponseEntity<List<OrderDetailsDTO>>(data,HttpStatus.OK);
 
 	}
 
+	@GetMapping(value="/prodId}")
+	public ResponseEntity<ProductDTO> viewOrders(@PathVariable String prodId) throws Exception{
+
+		 ProductDTO data=null;
+		try {
+			data = orderDetailsService.getProduct();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+		return new ResponseEntity<ProductDTO>(data,HttpStatus.OK);
+
+	}
 	
 	
 }

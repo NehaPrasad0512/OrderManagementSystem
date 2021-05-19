@@ -34,7 +34,9 @@ public class ProductDetailsController {
 	public ResponseEntity<String> addProduct(@RequestBody ProductDTO productdto) {
 
 		try {
-		String msg = productDetailsService.addProduct(productdto);
+		productdto.setProdID("P111");
+		String id=productdto.getProdID();
+		String msg = productDetailsService.addProduct(productdto,id);
 		return new ResponseEntity<String>(msg+" added successfully",HttpStatus.OK);
 
 		}catch(Exception e) {
@@ -95,5 +97,21 @@ public class ProductDetailsController {
 		p.setSellerId(val.getSellerId());
 		return p;
 	}
+	
+	@GetMapping(value="/search/{prodId}")
+	public ResponseEntity<ProductDTO> searchProductById(@PathVariable String prodId) throws Exception{
+
+		 ProductDTO data=null;
+		try {
+			data = productDetailsService.getSpecificProductOnId(prodId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+		return new ResponseEntity<ProductDTO>(data,HttpStatus.OK);
+
+	}
+
 	
 }

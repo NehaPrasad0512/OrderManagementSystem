@@ -82,8 +82,6 @@ public class OrderDetailsController {
 		
 	}
 	
-	
-	
 	@GetMapping(value="/view")
 	public ResponseEntity<List<OrderDetailsDTO>> viewOrders() throws Exception{
 

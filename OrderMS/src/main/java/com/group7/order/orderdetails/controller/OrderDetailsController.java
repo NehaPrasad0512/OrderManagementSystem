@@ -3,6 +3,7 @@ package com.group7.order.orderdetails.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bouncycastle.crypto.agreement.ECDHBasicAgreement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.dto.ProductDTO;
+import com.group7.order.orderdetails.dto.SellerStatus;
 import com.group7.order.orderdetails.service.OrderDetailsService;
 
 
@@ -46,21 +48,15 @@ public class OrderDetailsController {
 		}
 	}
 	
-	@PostMapping(value="/delete/{prodId}")
-	public ResponseEntity<String> deleteProductFromCart(@PathVariable String prodId) {
-
-		try {
-		String msg = orderDetailsService.deleteProductFromCart(prodId);
-		return new ResponseEntity<String>(msg+" deleted successfully",HttpStatus.OK);
-
-		}catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
+	@PostMapping(value="/delete/{buyerId}/{prodId}")
+	public ResponseEntity<String> deleteProductFromCart(@PathVariable String buyerId,@PathVariable String prodId) {
+		ProductDTO valueData = new RestTemplate().getForObject("/removeItemsCart/"+buyerId+"/"+prodId,ProductDTO.class);
+		return new ResponseEntity<String>(valueData.getProdID()+" deleted successfully",HttpStatus.OK);
 	}
 	
 	
-	@GetMapping(value="/placeOrder")
-	public ResponseEntity<String> placeOrder() {
+	@PostMapping(value="/placeOrder")
+	public ResponseEntity<String> placeOrder(@RequestBody SellerStatus info) {
 
 		try {
 		List cartItem = new RestTemplate().getForObject("http://localhost:8200/user/cart",List.class);
@@ -70,11 +66,13 @@ public class OrderDetailsController {
 		 CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, CartDTO.class);
 
 		List<CartDTO> item= mapper.convertValue(cartItem,listType);
-		
-		List<String> val = orderDetailsService.placeOrder(item);
+		for( CartDTO c:item) {	
+		ProductDTO valueData = new RestTemplate().getForObject("http://localhost:8400/product/search12/"+c.getProdId(),ProductDTO.class);
+		if(c.getQuantity()<=valueData.getStock() || info.getAddress().length()>=100) {
+		List<String> val = orderDetailsService.placeOrder(item,info);
 		
 		return new ResponseEntity<String>(val+" placed successfully",HttpStatus.OK);
-		}
+		}}}
 		return new ResponseEntity<String>("no items to place",HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -100,15 +98,13 @@ public class OrderDetailsController {
 	@GetMapping(value="/{prodId}")
 	public ResponseEntity<ProductDTO> viewOrders(@PathVariable String prodId) throws Exception{
 
-		 ProductDTO data=null;
+		 ProductDTO valueData=null;
 		try {
-			data = orderDetailsService.getProduct();
+			 valueData = new RestTemplate().getForObject("http://localhost:8400/product/search12/"+prodId,ProductDTO.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
-		return new ResponseEntity<ProductDTO>(data,HttpStatus.OK);
+		return new ResponseEntity<ProductDTO>(valueData,HttpStatus.OK);
 
 	}
 	

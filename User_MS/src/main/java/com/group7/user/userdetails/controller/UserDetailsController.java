@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
 import com.group7.user.userdetails.dto.CartDTO;
+import com.group7.user.userdetails.dto.LoginDTO;
 import com.group7.user.userdetails.dto.ProductDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
 import com.group7.user.userdetails.dto.WishlistDTO;
@@ -46,7 +47,8 @@ public class UserDetailsController {
 		String id;
 		try {
 		id= userDetailsService.registerBuyerUser(buyer);
-		return new ResponseEntity<String>(id+" Registered as a buyer successfully",HttpStatus.OK);
+		String message=environment.getProperty("BUYER_REGISTERED");
+		return new ResponseEntity<String>(id+" "+message,HttpStatus.OK);
 
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -58,35 +60,38 @@ public class UserDetailsController {
 		String id;
 		try {
 		id= userDetailsService.registerSellerUser(sellerdto);
-		return new ResponseEntity<String>(id+" Registered as a seller successfully",HttpStatus.OK);
+		String message=environment.getProperty("SELLER_REGISTERED");	
+		return new ResponseEntity<String>(id+" "+message,HttpStatus.OK);
  
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
 	
-	@GetMapping(value="/seller/login/{email}/{password}")
-	public ResponseEntity<String> loginSeller(@PathVariable String email,@PathVariable String password) {
+	@PostMapping(value="/seller/login")
+	public ResponseEntity<String> loginSellerDTO(@RequestBody LoginDTO loginDTO) {
 		String msg;
 		try {
-		msg= userDetailsService.loginSellerUser(email,password);
+		msg= userDetailsService.loginSeller(loginDTO);
+		//String message=environment.getProperty(msg);
 		return new ResponseEntity<String>(msg,HttpStatus.OK);
- 
+		}catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping(value="/buyerUser/login")
+	public ResponseEntity<String> loginBuyerDTO(@RequestBody LoginDTO loginDTO) {
+		String msg;
+		try {
+		msg= userDetailsService.loginBuyer(loginDTO);
+		String message=environment.getProperty(msg);
+		return new ResponseEntity<String>(message,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@GetMapping(value="/buyer/login/{email}/{password}")
-	public ResponseEntity<String> loginBuyer(@PathVariable String email,@PathVariable String password) {
-		String msg;
-		try {
-		msg= userDetailsService.loginBuyerUser(email, password);
-		return new ResponseEntity<String>(msg,HttpStatus.OK);
-		}catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
-	}
 
 	@PostMapping(value="/buyer/{buyerId}")
 	public ResponseEntity<String> DeleteBuyer(@PathVariable String buyerId) {
@@ -145,23 +150,23 @@ public class UserDetailsController {
 
 	@PostMapping(value="/buyer/wish-cart")
 	public ResponseEntity<String> getWishlistToCart(@RequestBody CartDTO cartDTO) {
+		String message;
 		try {
 		userDetailsService.wishToCart(cartDTO);
-		
-		return new ResponseEntity<String>("Successfully added product from wishlist to cart",HttpStatus.OK);
+		message=environment.getProperty("WISHLIST.DATA_PLACED");
+		return new ResponseEntity<String>("messsage",HttpStatus.OK);
  
 		}catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+			message=environment.getProperty("WISHLIST.NO_SUCH_PRODUCT");
+			return new ResponseEntity<String>(message,HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
 	@PostMapping(value="/buyer/cart/{buyerId}/{productName}/{quantity}")
 	public CartDTO addCartProduct(@PathVariable String buyerId,@PathVariable String productName,@PathVariable int quantity) {
 	ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
-	System.out.println(productId.getProdID());
-	
-		CartDTO value = userDetailsService.cartData(buyerId,productId.getProdID(),quantity);
-		return value;		
+	CartDTO value = userDetailsService.cartData(buyerId,productId.getProdID(),quantity);
+	return value;		
 	
 	}
 	
@@ -169,8 +174,8 @@ public class UserDetailsController {
 	public WishlistDTO addCartProduct(@PathVariable String buyerId,@PathVariable String productName) {
 	try {
 		ProductDTO productId = new RestTemplate().getForObject("http://localhost:8400/product/wishlist/"+productName, ProductDTO.class);
-	WishlistDTO value = userDetailsService.wishlistData(buyerId, productId.getProdID());
-	return value;		
+		WishlistDTO value = userDetailsService.wishlistData(buyerId, productId.getProdID());
+		return value;		
 	}catch(Exception e) {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage() ));
 	}}
@@ -180,10 +185,8 @@ public class UserDetailsController {
 		 List<CartDTO> data=new ArrayList<>();
 			try {
 				data=userDetailsService.viewAllCart();
-
 				return new ResponseEntity<>(data,HttpStatus.OK);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,environment.getProperty(e.getMessage()));		}
 
 	}

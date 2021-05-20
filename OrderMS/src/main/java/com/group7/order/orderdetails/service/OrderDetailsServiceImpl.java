@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.dto.ProductDTO;
+import com.group7.order.orderdetails.dto.SellerStatus;
 import com.group7.order.orderdetails.entity.CompositeTable;
 import com.group7.order.orderdetails.entity.Order;
 import com.group7.order.orderdetails.entity.ProductOrdered;
@@ -103,7 +104,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 		return dto;
 		
 	}
-	public List<String> placeOrder(List<CartDTO> cartItem) throws Exception{
+	public List<String> placeOrder(List<CartDTO> cartItem,SellerStatus info) throws Exception{
 		String str;
 		List<String> list=new ArrayList<>();
 		List<CartDTO> buyerDetail=new ArrayList<>();
@@ -113,14 +114,14 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 			value.setProdId(c.getProdId());
 			value.setQuantity(c.getQuantity());
 			str="O"+(val++);
-			String dataOrder = this.OrderDone(value.getBuyerId(),value.getProdId(),str);
+			String dataOrder = this.OrderDone(value.getBuyerId(),value.getProdId(),str,info.getAddress(),info.getPrice());
 			CompositeTable composite=new CompositeTable();
 			composite.setBuyerId(value.getBuyerId());
 			composite.setProdId(value.getProdId());
 			ProductOrdered ordered=new ProductOrdered();
 			ordered.setCompositetb(composite);
 			ordered.setQuantity(c.getQuantity());
-			ordered.setSellerId(str);
+			ordered.setSellerId(info.getSellerId());
 			productOrderedRepository.save(ordered);
 			list.add(dataOrder);
 			buyerDetail.add(c);
@@ -129,25 +130,18 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	}
 	
 	@Override
-	public String OrderDone(String buyerId,String prodId,String value) {
+	public String OrderDone(String buyerId,String prodId,String value,String address,float price) {
 		Order order=new Order();
 		//LocalDate dateToday=LocalDate.now();
 		order.setOrderId(value);
-		order.setAmount(1000);
+		order.setAmount((int) price);
 		Date date=new Date();
 		order.setBuyerId(buyerId);
 		order.setStatus("Order Placed");
-		order.setAddress("Kalyan");
+		order.setAddress(address);
 		order.setDate(date);
 		orderRepository.save(order);
 		return order.getOrderId();
-	}
-
-	@Override
-	public ProductDTO getProduct() {
-		// TODO Auto-generated method stub
-			
-		return null;
 	}
 		
 }

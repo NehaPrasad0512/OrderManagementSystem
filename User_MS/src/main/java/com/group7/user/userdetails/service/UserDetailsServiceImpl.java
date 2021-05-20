@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
 import com.group7.user.userdetails.dto.CartDTO;
+import com.group7.user.userdetails.dto.LoginDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
 import com.group7.user.userdetails.dto.WishlistDTO;
 import com.group7.user.userdetails.entity.Buyer;
@@ -93,12 +94,30 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		buyerdto.setEmail(email);
 		buyerdto.setPassword(password);
 		buyerdto.setIsActive("yes");
-		return "Successfully logged in";}
+		return "SELLER SUCCESSFUL LOGIN";}
 		else
-			return "login unsuccessful";
+			return "SELLER UNSUCCESSFULL LOGIN";
+	}
+	
+	@Override
+	public String loginBuyer(LoginDTO loginDTO) throws Exception {
+		Optional<Buyer> emailId = userDetailsRepository.findByEmail(loginDTO.getEmail());
+		
+		if(emailId.isEmpty()) {
+			throw new Exception("No buyer with such email exists"); 
+		}
+		if(emailId.get().getPassword().equals(loginDTO.getPassword())) {
+		BuyerDTO buyerdto=new BuyerDTO();
+		buyerdto.setEmail(emailId.get().getEmail());
+		buyerdto.setPassword(emailId.get().getPassword());
+		buyerdto.setIsActive("yes");
+		return "BUYER_SUCCESS_LOGIN";}
+		else
+			return "LOGIN_UNSUCCESSFUL";
 
 	}
 
+	
 	@Override
 	public String loginSellerUser(String email, String password) throws Exception {
 		Optional<Seller> emailSeller = sellerRepository.findByEmail(email);
@@ -114,6 +133,20 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	}
 
+	@Override
+	public String loginSeller(LoginDTO login) throws Exception {
+		Optional<Seller> emailSeller = sellerRepository.findByEmail(login.getEmail());
+		if(emailSeller.isEmpty())
+			throw new Exception("No seller with such email exists"); 
+		if(emailSeller.get().getPassword().equals(login.getPassword())) {
+		SellerDTO sellerdto=new SellerDTO();
+		sellerdto.setEmail(emailSeller.get().getEmail());
+		sellerdto.setPassword(emailSeller.get().getPassword());
+		sellerdto.setIsActive("yes");
+		return "Successfully logged in";}else
+			return "login unsuccessful";
+
+	}
 	@Override
 	public String deleteBuyer(String buyerId) throws Exception {
 		Optional<Buyer> buyerDelete = userDetailsRepository.findById(buyerId);
@@ -175,9 +208,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		Optional<Wishlist> dataProduct = wishlistRepository.findById(c);
 		try {
 			if(dataProduct.isEmpty())
-				throw new Exception("No such product exists in wishlist");
+				throw new Exception("WISHLIST.NO_SUCH_PRODUCT");
 		} catch (Exception e) {
-			return e.getMessage();
+			throw new Exception("WISHLIST.NO_SUCH_PRODUCT");
 		}
 		Cart cart=new Cart();
 		cart.setCompositeId(c);

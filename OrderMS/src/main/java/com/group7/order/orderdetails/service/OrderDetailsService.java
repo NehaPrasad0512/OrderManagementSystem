@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.dto.ProductDTO;
+import com.group7.order.orderdetails.dto.SellerStatus;
 
 @Service
 public interface OrderDetailsService {
@@ -17,11 +18,11 @@ public interface OrderDetailsService {
 	
 	public OrderDetailsDTO viewOrders(String orderId) throws Exception;
 	
-	public List<String> placeOrder(List<CartDTO> cartItem) throws Exception;
+	public List<String> placeOrder(List<CartDTO> cartItem,SellerStatus info) throws Exception;
 	
-	public String OrderDone(String buyerId,String prodId,String value);
 	public List<OrderDetailsDTO> viewAllOrders() throws Exception;
-	public ProductDTO getProduct();
+	
+	String OrderDone(String buyerId, String prodId, String value, String address, float price);
 	
 	
 	

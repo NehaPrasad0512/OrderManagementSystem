@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.group7.user.userdetails.dto.BuyerDTO;
 import com.group7.user.userdetails.dto.CartDTO;
+import com.group7.user.userdetails.dto.LoginDTO;
 import com.group7.user.userdetails.dto.SellerDTO;
 import com.group7.user.userdetails.dto.WishlistDTO;
 
@@ -31,4 +32,6 @@ public interface UserDetailsService {
 	public String deleteFromCart(String prodId,String buyerId);
 	
 	public List<CartDTO> viewAllCart() throws Exception;
+	public String loginSeller(LoginDTO login) throws Exception;
+	public String loginBuyer(LoginDTO loginDTO) throws Exception;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.group7.product.productdetails.dto.ProductDTO;
+import com.group7.product.productdetails.dto.SubscribedProductDTO;
 
 @Service
 public interface ProductDetailsService {
@@ -20,4 +21,10 @@ public interface ProductDetailsService {
 	public ProductDTO getSpecificProduct(String productName);
 
 	public ProductDTO getSpecificProductOnId(String prodId) throws Exception;
+
+	void updateStock(ProductDTO productDTO) throws Exception;
+	
+	public void addProductTO(SubscribedProductDTO subscribedProductDTO) throws Exception;
+
+		
 }

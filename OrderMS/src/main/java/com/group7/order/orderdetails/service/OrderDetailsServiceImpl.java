@@ -32,7 +32,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	
 	@Override
 	public String addProductToCart(OrderDetailsDTO orderDetailsDTO) throws Exception {
-		// TODO Auto-generated method stub
 		Order order = new Order();
 		order.setBuyerId(orderDetailsDTO.getBuyerId());
 		order.setAddress(orderDetailsDTO.getAddress());
@@ -47,20 +46,17 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	}
 
 	@Override
-	public String deleteProductFromCart(String prodId) throws Exception {
-		// TODO Auto-generated method stub
-		
-		Optional<Order> orderDetail = orderRepository.findById(prodId);
+	public String deleteProductFromCart(String orderId) throws Exception {		
+		Optional<Order> orderDetail = orderRepository.findById(orderId);
 		if(orderDetail.isEmpty())
 			throw new Exception("ProductId not found to delete");
-		orderRepository.deleteById(prodId);
+		orderRepository.deleteById(orderId);
 		String message="Successfully deleted from product detail";
 		return message;
 	}
 
 	@Override
 	public OrderDetailsDTO viewOrders(String orderId) throws Exception {
-		// TODO Auto-generated method stub
 		Order order = orderRepository.findByOrderId(orderId);
 		
 		OrderDetailsDTO dto = new OrderDetailsDTO();
@@ -87,7 +83,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 		if(orders==null) {
 			throw new Exception("orders are empty");
 		}
-		
 		List<OrderDetailsDTO> dto = new ArrayList<>();
 		
 		for(Order o : orders) {
@@ -132,7 +127,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 	@Override
 	public String OrderDone(String buyerId,String prodId,String value,String address,float price) {
 		Order order=new Order();
-		//LocalDate dateToday=LocalDate.now();
 		order.setOrderId(value);
 		order.setAmount((int) price);
 		Date date=new Date();

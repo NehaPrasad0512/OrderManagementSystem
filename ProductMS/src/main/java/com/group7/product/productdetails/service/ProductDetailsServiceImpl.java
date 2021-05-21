@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.group7.product.productdetails.dto.ProductDTO;
+import com.group7.product.productdetails.dto.SubscribedProductDTO;
+import com.group7.product.productdetails.entity.CompositeTable;
 import com.group7.product.productdetails.entity.Product;
+import com.group7.product.productdetails.entity.SubscribedProduct;
 import com.group7.product.productdetails.repository.ProductOrderedRepository;
 import com.group7.product.productdetails.repository.ProductRepository;
 import com.group7.product.productdetails.validator.Validator;
@@ -139,6 +142,33 @@ public class ProductDetailsServiceImpl implements ProductDetailsService{
 		pDTO.setSellerId(product.get().getSellerId());
 		pDTO.setSubcategory(product.get().getSubcategory());
 		return pDTO;
+	}
+
+	@Override
+	public void updateStock(ProductDTO productDTO) throws Exception {
+		Validator.ValidateProduct(productDTO);
+		Optional<Product> product = productRepository.findById(productDTO.getProdID());
+		if(!product.isEmpty())
+		{
+		Product prod=new Product();
+		prod.setStock(product.get().getStock());
+		productRepository.save(prod);
+		}
+		
+	}
+	
+
+	//add product to subscribed product
+	@Override
+	public void addProductTO(SubscribedProductDTO subscribedProductDTO) throws Exception{
+		SubscribedProduct sub = new SubscribedProduct();
+		CompositeTable comp=new CompositeTable();
+		comp.setBuyerId(subscribedProductDTO.getBuyerId());
+		comp.setProdid(subscribedProductDTO.getProdId());
+		sub.setCompositetb(comp);
+		sub.setQuantity(subscribedProductDTO.getQuantity());
+		sub.setSellerId(subscribedProductDTO.getSellerId());
+		productOrderedRepository.save(sub);
 	}
 	
 }

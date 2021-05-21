@@ -1,5 +1,8 @@
 package com.group7.product.productdetails.dto;
 
+import com.group7.product.productdetails.entity.CompositeTable;
+import com.group7.product.productdetails.entity.SubscribedProduct;
+
 public class SubscribedProductDTO {
 
 	private String buyerId;
@@ -30,6 +33,17 @@ public class SubscribedProductDTO {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	
+	public static SubscribedProductDTO valueOf(SubscribedProduct subscribedProduct) {
+		SubscribedProduct subProd=new SubscribedProduct();
+		CompositeTable ct=new CompositeTable();
+		ct.setBuyerId(subscribedProduct.getCompositetb().getBuyerId());
+		ct.setProdid(subscribedProduct.getCompositetb().getProdid());
+		subProd.setCompositetb(ct);
+		subProd.setQuantity(subscribedProduct.getQuantity());
+		subProd.setSellerId(subscribedProduct.getSellerId());
+		return null;
 	}
 	
 	

@@ -15,6 +15,7 @@ import com.group7.order.orderdetails.dto.CartDTO;
 import com.group7.order.orderdetails.dto.OrderDetailsDTO;
 import com.group7.order.orderdetails.dto.ProductDTO;
 import com.group7.order.orderdetails.dto.SellerStatus;
+import com.group7.order.orderdetails.entity.Order;
 import com.group7.order.orderdetails.service.OrderDetailsService;
 
 
@@ -54,6 +55,14 @@ public class OrderDetailsController {
 		return new ResponseEntity<String>(valueData.getProdID()+" deleted successfully",HttpStatus.OK);
 	}
 	
+	@PostMapping(value="/delete/{orderId}")
+	public ResponseEntity<String> deleteOrder(@PathVariable String orderId) {
+		try {
+			return new ResponseEntity<String>(orderDetailsService.deleteProductFromCart(orderId)+" deleted successfully",HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage()+" deleted successfully",HttpStatus.OK);
+		}
+	}
 	
 	@PostMapping(value="/placeOrder")
 	public ResponseEntity<String> placeOrder(@RequestBody SellerStatus info) {
@@ -87,7 +96,6 @@ public class OrderDetailsController {
 		try {
 			data = orderDetailsService.viewAllOrders();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
@@ -95,17 +103,17 @@ public class OrderDetailsController {
 
 	}
 
-	@GetMapping(value="/{prodId}")
-	public ResponseEntity<ProductDTO> viewOrders(@PathVariable String prodId) throws Exception{
+	@GetMapping(value="view/{orderId}")
+	public ResponseEntity<OrderDetailsDTO> viewOrders(@PathVariable String orderId) throws Exception{
 
-		 ProductDTO valueData=null;
 		try {
-			 valueData = new RestTemplate().getForObject("http://localhost:8400/product/search12/"+prodId,ProductDTO.class);
+			OrderDetailsDTO data = orderDetailsService.viewOrders(orderId);
+			return new ResponseEntity<OrderDetailsDTO>(data,HttpStatus.OK);
+	
 		} catch (Exception e) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
-		return new ResponseEntity<ProductDTO>(valueData,HttpStatus.OK);
-
+		
 	}
 	
 	
